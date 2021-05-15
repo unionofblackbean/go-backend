@@ -9,6 +9,11 @@ import (
 )
 
 func CreateUser(user *models.User) (err error) {
+	err = checkPool()
+	if err != nil {
+		return
+	}
+
 	_, err = pool.Exec(context.Background(),
 		"INSERT INTO users VALUES ($1, $2, $3);",
 		pgtype.UUID{
@@ -22,6 +27,11 @@ func CreateUser(user *models.User) (err error) {
 }
 
 func GetUser(uuid uuid.UUID) (user *models.User, err error) {
+	err = checkPool()
+	if err != nil {
+		return
+	}
+
 	var rawUUID pgtype.UUID
 	var rawPasswordHash string
 	var rawPasswordSalt string
@@ -44,24 +54,31 @@ func GetUser(uuid uuid.UUID) (user *models.User, err error) {
 	return
 }
 
-func GetAllUsers() ([]models.User, error) {
+func GetAllUsers() (users []models.User, err error) {
+	err = checkPool()
+	if err != nil {
+		return
+	}
+
 	rows, err := pool.Query(context.Background(),
 		"SELECT * FROM users;",
 	)
 	if err != nil {
-		return nil, err
+		return
 	}
 
-	var users []models.User
 	for rows.Next() {
 		var uuid pgtype.UUID
 		var passwordHash string
 		var passwordSalt string
-		rows.Scan(
+		err = rows.Scan(
 			&uuid,
 			&passwordHash,
 			&passwordSalt,
 		)
+		if err != nil {
+			return
+		}
 
 		users = append(users, models.User{
 			UUID:         uuid.Bytes,
@@ -70,10 +87,15 @@ func GetAllUsers() ([]models.User, error) {
 		})
 	}
 
-	return users, nil
+	return
 }
 
 func UpdateUser(user *models.User) (err error) {
+	err = checkPool()
+	if err != nil {
+		return
+	}
+
 	_, err = pool.Exec(context.Background(),
 		"UPDATE users SET password_hash=$1, password_salt=$2 WHERE uuid=$3;",
 		user.PasswordHash,
@@ -87,6 +109,11 @@ func UpdateUser(user *models.User) (err error) {
 }
 
 func DeleteUser(uuid uuid.UUID) (err error) {
+	err = checkPool()
+	if err != nil {
+		return
+	}
+
 	_, err = pool.Exec(context.Background(),
 		"DELETE FROM users WHERE uuid=$1;",
 		pgtype.UUID{
