@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	pool, err := database.Pool(
+	pool, err := database.NewPool(
 		"backend", "backend",
 		"127.0.0.1", 5432,
 		"backend",

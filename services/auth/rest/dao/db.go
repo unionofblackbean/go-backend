@@ -3,12 +3,12 @@ package dao
 import (
 	"errors"
 
-	"github.com/jackc/pgx/v4/pgxpool"
+	"github.com/unionofblackbean/backend/pkg/database"
 )
 
-var pool *pgxpool.Pool
+var pool *database.Pool
 
-func Init(p *pgxpool.Pool) {
+func Init(p *database.Pool) {
 	pool = p
 }
 

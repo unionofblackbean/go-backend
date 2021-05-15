@@ -1,8 +1,6 @@
 package dao
 
 import (
-	"context"
-
 	"github.com/google/uuid"
 	"github.com/jackc/pgtype"
 	"github.com/unionofblackbean/backend/services/auth/rest/models"
@@ -14,7 +12,7 @@ func CreateUser(user *models.User) (err error) {
 		return
 	}
 
-	_, err = pool.Exec(context.Background(),
+	err = pool.Exec(
 		"INSERT INTO users VALUES ($1, $2, $3);",
 		pgtype.UUID{
 			Bytes:  user.UUID,
@@ -35,7 +33,7 @@ func GetUser(uuid uuid.UUID) (user *models.User, err error) {
 	var rawUUID pgtype.UUID
 	var rawPasswordHash string
 	var rawPasswordSalt string
-	err = pool.QueryRow(context.Background(),
+	err = pool.QueryRow(
 		"SELECT * FROM users WHERE uuid=$1;",
 		pgtype.UUID{
 			Bytes:  uuid,
@@ -60,7 +58,7 @@ func GetAllUsers() (users []models.User, err error) {
 		return
 	}
 
-	rows, err := pool.Query(context.Background(),
+	rows, err := pool.Query(
 		"SELECT * FROM users;",
 	)
 	if err != nil {
@@ -96,7 +94,7 @@ func UpdateUser(user *models.User) (err error) {
 		return
 	}
 
-	_, err = pool.Exec(context.Background(),
+	err = pool.Exec(
 		"UPDATE users SET password_hash=$1, password_salt=$2 WHERE uuid=$3;",
 		user.PasswordHash,
 		user.PasswordSalt,
@@ -114,7 +112,7 @@ func DeleteUser(uuid uuid.UUID) (err error) {
 		return
 	}
 
-	_, err = pool.Exec(context.Background(),
+	err = pool.Exec(
 		"DELETE FROM users WHERE uuid=$1;",
 		pgtype.UUID{
 			Bytes:  uuid,

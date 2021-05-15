@@ -4,13 +4,13 @@ import (
 	"fmt"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/jackc/pgx/v4/pgxpool"
+	"github.com/unionofblackbean/backend/pkg/database"
 	"github.com/unionofblackbean/backend/pkg/responses"
 	"github.com/unionofblackbean/backend/services/auth/rest/controllers"
 	"github.com/unionofblackbean/backend/services/auth/rest/dao"
 )
 
-func Init(pool *pgxpool.Pool) {
+func Init(pool *database.Pool) {
 	dao.Init(pool)
 }
 
