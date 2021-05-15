@@ -1,8 +1,6 @@
 package security
 
-import (
-	"github.com/unionofblackbean/ubbgdk/pool"
-)
+import "github.com/unionofblackbean/backend/pkg/pool"
 
 func HashPassword(password string, salt []byte) ([]byte, error) {
 	buf := pool.GetBuffer()
