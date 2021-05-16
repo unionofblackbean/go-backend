@@ -5,7 +5,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/jackc/pgtype"
-	"github.com/unionofblackbean/backend/services/auth/rest/models"
+	"github.com/unionofblackbean/backend/services/auth/api/models"
 )
 
 func CreateUser(user *models.User) (err error) {

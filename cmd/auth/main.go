@@ -10,7 +10,7 @@ import (
 	"github.com/unionofblackbean/backend/pkg/config"
 	"github.com/unionofblackbean/backend/pkg/database"
 	"github.com/unionofblackbean/backend/services/auth"
-	"github.com/unionofblackbean/backend/services/auth/rest"
+	"github.com/unionofblackbean/backend/services/auth/api"
 	"github.com/urfave/cli/v2"
 )
 
@@ -71,8 +71,8 @@ func main() {
 				}
 			}
 
-			rest.Init(pool)
-			rest.Run(conf.Rest.BindAddress, conf.Rest.BindPort)
+			api.Init(pool)
+			api.Run(conf.Rest.BindAddress, conf.Rest.BindPort)
 
 			return nil
 		},

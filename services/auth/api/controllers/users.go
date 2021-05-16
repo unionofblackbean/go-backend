@@ -11,8 +11,8 @@ import (
 	"github.com/unionofblackbean/backend/pkg/encoding"
 	"github.com/unionofblackbean/backend/pkg/responses"
 	"github.com/unionofblackbean/backend/pkg/security"
-	"github.com/unionofblackbean/backend/services/auth/rest/dao"
-	"github.com/unionofblackbean/backend/services/auth/rest/models"
+	"github.com/unionofblackbean/backend/services/auth/api/dao"
+	"github.com/unionofblackbean/backend/services/auth/api/models"
 )
 
 func Users(ctx *fiber.Ctx) error {
