@@ -1,4 +1,4 @@
-package webhelpers
+package rest
 
 import (
 	"github.com/gofiber/fiber/v2"
