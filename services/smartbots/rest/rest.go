@@ -6,7 +6,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/unionofblackbean/backend/pkg/database"
 	"github.com/unionofblackbean/backend/pkg/webhelpers"
-	"github.com/unionofblackbean/backend/services/auth/rest/dao"
+	"github.com/unionofblackbean/backend/services/smartbots/rest/dao"
 )
 
 func Init(pool *database.Pool) {
