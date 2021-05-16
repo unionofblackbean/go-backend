@@ -1,6 +1,8 @@
 package dao
 
 import (
+	"fmt"
+
 	"github.com/google/uuid"
 	"github.com/jackc/pgtype"
 	"github.com/unionofblackbean/backend/services/auth/rest/models"
@@ -83,6 +85,37 @@ func GetAllUsers() (users []models.User, err error) {
 			PasswordHash: passwordHash,
 			PasswordSalt: passwordSalt,
 		})
+	}
+
+	return
+}
+
+func GetAllUsersUUID() (uuids []string, err error) {
+	err = checkPool()
+	if err != nil {
+		return
+	}
+
+	rows, err := pool.Query(
+		"SELECT uuid FROM users;",
+	)
+	if err != nil {
+		return
+	}
+
+	for rows.Next() {
+		var rawUserUUID pgtype.UUID
+		err = rows.Scan(&rawUserUUID)
+		if err != nil {
+			return
+		}
+
+		userUUID, err := uuid.FromBytes(rawUserUUID.Bytes[:])
+		if err != nil {
+			return nil, fmt.Errorf("failed to process UUID obtained from database -> %v", err)
+		}
+
+		uuids = append(uuids, userUUID.String())
 	}
 
 	return
