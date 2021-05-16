@@ -22,7 +22,7 @@ var conf = auth.Config{
 		BindAddress: "127.0.0.1",
 		BindPort:    8000,
 	},
-	Database: auth.DatabaseConfig{
+	Database: database.Config{
 		Address: "127.0.0.1",
 		Port:    5432,
 

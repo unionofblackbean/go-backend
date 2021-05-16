@@ -20,7 +20,7 @@ var conf = smartbots.Config{
 		BindAddress: "127.0.0.1",
 		BindPort:    8001,
 	},
-	Database: smartbots.DatabaseConfig{
+	Database: database.Config{
 		Address: "127.0.0.1",
 		Port:    5432,
 
