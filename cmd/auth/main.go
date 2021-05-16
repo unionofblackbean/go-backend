@@ -20,7 +20,7 @@ var databaseSchema string
 var conf = auth.Config{
 	Rest: auth.RestConfig{
 		BindAddress: "127.0.0.1",
-		BindPort:    8080,
+		BindPort:    8000,
 	},
 	Database: auth.DatabaseConfig{
 		Address: "127.0.0.1",
