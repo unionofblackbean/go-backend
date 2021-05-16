@@ -6,6 +6,6 @@ import (
 )
 
 func NotFound(ctx *fiber.Ctx) error {
-	responses.SendNotFoundResponse(ctx)
+	responses.SendEndpointNotFoundResponse(ctx)
 	return nil
 }

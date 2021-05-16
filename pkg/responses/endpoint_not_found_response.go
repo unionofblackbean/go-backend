@@ -6,6 +6,6 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func SendNotFoundResponse(ctx *fiber.Ctx) {
+func SendEndpointNotFoundResponse(ctx *fiber.Ctx) {
 	SendMessageResponse(ctx, http.StatusNotFound, "endpoint not found")
 }

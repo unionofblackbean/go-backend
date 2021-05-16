@@ -69,6 +69,15 @@ func Users(ctx *fiber.Ctx) error {
 			return fmt.Errorf("failed to parse UUID -> %v", err)
 		}
 
+		exists, err := dao.IsExistsUser(uuid)
+		if err != nil {
+			return fmt.Errorf("failed to check if user exists -> %v", err)
+		}
+		if !exists {
+			responses.SendResourceNotFoundResponse(ctx)
+			return nil
+		}
+
 		oldUser, err := dao.GetUser(uuid)
 		if err != nil {
 			return fmt.Errorf("failed to get user -> %v", err)
