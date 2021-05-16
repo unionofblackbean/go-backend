@@ -78,34 +78,35 @@ func Users(ctx *fiber.Ctx) error {
 			return nil
 		}
 
-		oldUser, err := dao.GetUser(uuid)
+		dbUser, err := dao.GetUser(uuid)
 		if err != nil {
 			return fmt.Errorf("failed to get user -> %v", err)
 		}
 
-		// real old password salt from database
-		oldPasswordSalt, err := encoding.Base64RawStdDecodeString(oldUser.PasswordSalt)
+		// password salt from database
+		dbPasswordSalt, err := encoding.Base64RawStdDecodeString(dbUser.PasswordSalt)
 		if err != nil {
 			return fmt.Errorf("failed to base64 decode old password salt -> %v", err)
 		}
-		// password hash produced from "old_password" form value + real old password salt
+
+		// password hash produced from "old_password" form value + password salt from database
 		passwordHash, err := security.HashPassword(
 			oldPassword,
-			oldPasswordSalt,
+			dbPasswordSalt,
 		)
 		if err != nil {
 			return fmt.Errorf("failed to hash inputted old password -> %v", err)
 		}
 
 		// real old password hash from database
-		oldPasswordHash, err := encoding.Base64RawStdDecodeString(oldUser.PasswordHash)
+		dbPasswordHash, err := encoding.Base64RawStdDecodeString(dbUser.PasswordHash)
 		if err != nil {
 			return fmt.Errorf("failed to base64 decode old password hash -> %v", err)
 		}
 
 		// compare produced password hash and real password hash
-		if bytes.Equal(passwordHash, oldPasswordHash) {
-			newUser, err := models.NewUser(oldUser.UUID, newPassword)
+		if bytes.Equal(passwordHash, dbPasswordHash) {
+			newUser, err := models.NewUser(dbUser.UUID, newPassword)
 			if err != nil {
 				return fmt.Errorf("failed to create new user object -> %v", err)
 			}
