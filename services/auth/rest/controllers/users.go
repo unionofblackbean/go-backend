@@ -39,7 +39,7 @@ func Users(ctx *fiber.Ctx) error {
 
 		exists, err := dao.IsExistsUser(uuid)
 		if err != nil {
-			return fmt.Errorf("failed to check if user exists -> %v", err)
+			return fmt.Errorf("failed to check user's existence -> %v", err)
 		}
 		if exists {
 			responses.SendResourceAlreadyExistsResponse(ctx)
@@ -71,7 +71,7 @@ func Users(ctx *fiber.Ctx) error {
 
 		exists, err := dao.IsExistsUser(uuid)
 		if err != nil {
-			return fmt.Errorf("failed to check if user exists -> %v", err)
+			return fmt.Errorf("failed to check user's existence -> %v", err)
 		}
 		if !exists {
 			responses.SendResourceNotFoundResponse(ctx)
@@ -86,7 +86,7 @@ func Users(ctx *fiber.Ctx) error {
 		// password salt from database
 		dbPasswordSalt, err := encoding.Base64RawStdDecodeString(dbUser.PasswordSalt)
 		if err != nil {
-			return fmt.Errorf("failed to base64 decode old password salt -> %v", err)
+			return fmt.Errorf("failed to base64 decode password salt from database -> %v", err)
 		}
 
 		// password hash produced from "old_password" form value + password salt from database
@@ -101,7 +101,7 @@ func Users(ctx *fiber.Ctx) error {
 		// real old password hash from database
 		dbPasswordHash, err := encoding.Base64RawStdDecodeString(dbUser.PasswordHash)
 		if err != nil {
-			return fmt.Errorf("failed to base64 decode old password hash -> %v", err)
+			return fmt.Errorf("failed to base64 decode password hash from database -> %v", err)
 		}
 
 		// compare produced password hash and real password hash
@@ -129,30 +129,30 @@ func Users(ctx *fiber.Ctx) error {
 			return fmt.Errorf("failed to parse UUID -> %v", err)
 		}
 
-		user, err := dao.GetUser(uuid)
+		dbUser, err := dao.GetUser(uuid)
 		if err != nil {
-			return fmt.Errorf("failed to get user -> %v", err)
+			return fmt.Errorf("failed to get user from database -> %v", err)
 		}
 
-		passwordSalt, err := encoding.Base64RawStdDecodeString(user.PasswordSalt)
+		dbPasswordSalt, err := encoding.Base64RawStdDecodeString(dbUser.PasswordSalt)
 		if err != nil {
-			return fmt.Errorf("failed to base64 decode password salt -> %v", err)
+			return fmt.Errorf("failed to base64 decode password salt from database -> %v", err)
 		}
 
-		// password hash produced from "old_password" form value + real old password salt
-		passwordHash, err := security.HashPassword(password, passwordSalt)
+		// password hash produced from "old_password" form value + password salt from database
+		passwordHash, err := security.HashPassword(password, dbPasswordSalt)
 		if err != nil {
-			return fmt.Errorf("failed to hash password -> %v", err)
+			return fmt.Errorf("failed to hash inputted password -> %v", err)
 		}
 
-		// real old password hash from database
-		oldPasswordHash, err := encoding.Base64RawStdDecodeString(user.PasswordHash)
+		// password hash from database
+		dbPasswordHash, err := encoding.Base64RawStdDecodeString(dbUser.PasswordHash)
 		if err != nil {
-			return fmt.Errorf("failed to base64 decode old password hash -> ")
+			return fmt.Errorf("failed to base64 decode password hash from database -> ")
 		}
 
 		// compare produced password hash and real password hash
-		if bytes.Equal(passwordHash, oldPasswordHash) {
+		if bytes.Equal(passwordHash, dbPasswordHash) {
 			err := dao.DeleteUser(uuid)
 			if err != nil {
 				return fmt.Errorf("failed to delete user -> %v", err)
