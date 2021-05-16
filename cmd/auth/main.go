@@ -1,14 +1,13 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
 
 	_ "embed"
 
+	"github.com/unionofblackbean/backend/pkg/config"
 	"github.com/unionofblackbean/backend/pkg/database"
 	"github.com/unionofblackbean/backend/services/auth"
 	"github.com/unionofblackbean/backend/services/auth/rest"
@@ -18,7 +17,7 @@ import (
 //go:embed schema.sql
 var databaseSchema string
 
-var config = auth.Config{
+var conf = auth.Config{
 	Rest: auth.RestConfig{
 		BindAddress: "127.0.0.1",
 		BindPort:    8080,
@@ -50,21 +49,13 @@ func main() {
 		Action: func(ctx *cli.Context) error {
 			configPath := ctx.String("config")
 			if configPath != "" {
-				configBytes, err := ioutil.ReadFile(configPath)
-				if err != nil {
-					return fmt.Errorf("failed to open config file -> %v", err)
-				}
-
-				err = json.Unmarshal(configBytes, &config)
-				if err != nil {
-					return fmt.Errorf("failed to parse config file -> %v", err)
-				}
+				config.Load(configPath, &conf)
 			}
 
 			pool, err := database.NewPool(
-				config.Database.Username, config.Database.Password,
-				config.Database.Address, config.Database.Port,
-				config.Database.Name,
+				conf.Database.Username, conf.Database.Password,
+				conf.Database.Address, conf.Database.Port,
+				conf.Database.Name,
 			)
 			if err != nil {
 				return fmt.Errorf("failed to establish connection with database -> %v", err)
@@ -78,7 +69,7 @@ func main() {
 			}
 
 			rest.Init(pool)
-			rest.Run(config.Rest.BindAddress, config.Rest.BindPort)
+			rest.Run(conf.Rest.BindAddress, conf.Rest.BindPort)
 
 			return nil
 		},
