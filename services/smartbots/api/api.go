@@ -1,4 +1,4 @@
-package rest
+package api
 
 import (
 	"fmt"
@@ -6,7 +6,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/unionofblackbean/backend/pkg/database"
 	"github.com/unionofblackbean/backend/pkg/rest"
-	"github.com/unionofblackbean/backend/services/smartbots/rest/dao"
+	"github.com/unionofblackbean/backend/services/smartbots/api/dao"
 )
 
 func Init(pool *database.Pool) {
