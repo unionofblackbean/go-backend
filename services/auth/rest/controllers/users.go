@@ -124,7 +124,7 @@ func Users(ctx *fiber.Ctx) error {
 			return err
 		}
 
-		passwordSalt, err := encoding.Base64RawStdDecodeString(user.PasswordHash)
+		passwordSalt, err := encoding.Base64RawStdDecodeString(user.PasswordSalt)
 		if err != nil {
 			return err
 		}
