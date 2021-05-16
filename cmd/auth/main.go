@@ -61,7 +61,7 @@ func main() {
 				conf.Database.Name,
 			)
 			if err != nil {
-				return fmt.Errorf("failed to establish connection with database -> %v", err)
+				return fmt.Errorf("failed to create database connection pool -> %v", err)
 			}
 
 			if ctx.Bool("init-db") {

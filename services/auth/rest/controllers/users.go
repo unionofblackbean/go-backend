@@ -3,6 +3,7 @@ package controllers
 import (
 	"bytes"
 	"errors"
+	"fmt"
 	"net/http"
 
 	"github.com/gofiber/fiber/v2"
@@ -22,19 +23,19 @@ func Users(ctx *fiber.Ctx) error {
 		if rawUUID == "" {
 			users, err := dao.GetAllUsers()
 			if err != nil {
-				return err
+				return fmt.Errorf("failed to get all users -> %v", err)
 			}
 
 			responses.SendDataResponse(ctx, &users)
 		} else {
 			uuid, err := uuid.Parse(rawUUID)
 			if err != nil {
-				return err
+				return fmt.Errorf("failed to parse UUID -> %v", err)
 			}
 
 			user, err := dao.GetUser(uuid)
 			if err != nil {
-				return err
+				return fmt.Errorf("failed to get user -> %v", err)
 			}
 
 			responses.SendDataResponse(ctx, user)
@@ -49,15 +50,18 @@ func Users(ctx *fiber.Ctx) error {
 
 		uuid, err := uuid.Parse(rawUUID)
 		if err != nil {
-			return err
+			return fmt.Errorf("failed to parse UUID -> %v", err)
 		}
 
 		user, err := models.NewUser(uuid, rawPassword)
 		if err != nil {
-			return err
+			return fmt.Errorf("failed to create new user object -> %v", err)
 		}
 
-		dao.CreateUser(user)
+		err = dao.CreateUser(user)
+		if err != nil {
+			return fmt.Errorf("failed to create user -> %v", err)
+		}
 	case http.MethodPatch:
 		rawUUID := ctx.FormValue("uuid")
 		oldPassword := ctx.FormValue("old_password")
@@ -69,18 +73,18 @@ func Users(ctx *fiber.Ctx) error {
 
 		uuid, err := uuid.Parse(rawUUID)
 		if err != nil {
-			return err
+			return fmt.Errorf("failed to parse UUID -> %v", err)
 		}
 
 		oldUser, err := dao.GetUser(uuid)
 		if err != nil {
-			return err
+			return fmt.Errorf("failed to get user -> %v", err)
 		}
 
 		// real old password salt from database
 		oldPasswordSalt, err := encoding.Base64RawStdDecodeString(oldUser.PasswordSalt)
 		if err != nil {
-			return err
+			return fmt.Errorf("failed to base64 decode old password salt -> %v", err)
 		}
 		// password hash produced from "old_password" form value + real old password salt
 		passwordHash, err := security.HashPassword(
@@ -88,23 +92,26 @@ func Users(ctx *fiber.Ctx) error {
 			oldPasswordSalt,
 		)
 		if err != nil {
-			return err
+			return fmt.Errorf("failed to hash inputted old password -> %v", err)
 		}
 
 		// real old password hash from database
 		oldPasswordHash, err := encoding.Base64RawStdDecodeString(oldUser.PasswordHash)
 		if err != nil {
-			return err
+			return fmt.Errorf("failed to base64 decode old password hash -> %v", err)
 		}
 
 		// compare produced password hash and real password hash
 		if bytes.Equal(passwordHash, oldPasswordHash) {
 			newUser, err := models.NewUser(oldUser.UUID, newPassword)
 			if err != nil {
-				return err
+				return fmt.Errorf("failed to create new user object -> %v", err)
 			}
 
-			return dao.UpdateUser(newUser)
+			err = dao.UpdateUser(newUser)
+			if err != nil {
+				return fmt.Errorf("failed to update user -> %v", err)
+			}
 		}
 	case http.MethodDelete:
 		rawUUID := ctx.FormValue("uuid")
@@ -116,34 +123,37 @@ func Users(ctx *fiber.Ctx) error {
 
 		uuid, err := uuid.Parse(rawUUID)
 		if err != nil {
-			return err
+			return fmt.Errorf("failed to parse UUID -> %v", err)
 		}
 
 		user, err := dao.GetUser(uuid)
 		if err != nil {
-			return err
+			return fmt.Errorf("failed to get user -> %v", err)
 		}
 
 		passwordSalt, err := encoding.Base64RawStdDecodeString(user.PasswordSalt)
 		if err != nil {
-			return err
+			return fmt.Errorf("failed to base64 decode password salt -> %v", err)
 		}
 
 		// password hash produced from "old_password" form value + real old password salt
 		passwordHash, err := security.HashPassword(password, passwordSalt)
 		if err != nil {
-			return err
+			return fmt.Errorf("failed to hash password -> %v", err)
 		}
 
 		// real old password hash from database
 		oldPasswordHash, err := encoding.Base64RawStdDecodeString(user.PasswordHash)
 		if err != nil {
-			return err
+			return fmt.Errorf("failed to base64 decode old password hash -> ")
 		}
 
 		// compare produced password hash and real password hash
 		if bytes.Equal(passwordHash, oldPasswordHash) {
-			return dao.DeleteUser(uuid)
+			err := dao.DeleteUser(uuid)
+			if err != nil {
+				return fmt.Errorf("failed to delete user -> %v", err)
+			}
 		} else {
 			return errors.New("incorrect password")
 		}

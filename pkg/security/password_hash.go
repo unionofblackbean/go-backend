@@ -1,6 +1,10 @@
 package security
 
-import "github.com/unionofblackbean/backend/pkg/pool"
+import (
+	"fmt"
+
+	"github.com/unionofblackbean/backend/pkg/pool"
+)
 
 func HashPassword(password string, salt []byte) ([]byte, error) {
 	buf := pool.GetBuffer()
@@ -9,13 +13,13 @@ func HashPassword(password string, salt []byte) ([]byte, error) {
 	// write password to buffer
 	_, err := buf.WriteString(password)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to write password into byte buffer -> %v", err)
 	}
 
 	// write salt to buffer
 	_, err = buf.Write(salt)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to write salt into byte buffer -> %v", err)
 	}
 
 	// hash password&salt
@@ -23,7 +27,7 @@ func HashPassword(password string, salt []byte) ([]byte, error) {
 	defer pool.PutSha3512Hash(hash)
 	_, err = hash.Write(buf.Bytes())
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to write byte buffer into hash function -> %v", err)
 	}
 
 	return hash.Sum(nil), nil

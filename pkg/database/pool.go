@@ -14,11 +14,19 @@ type Pool struct {
 
 func (p *Pool) Exec(sql string, args ...interface{}) (err error) {
 	_, err = p.p.Exec(context.Background(), sql, args)
+	if err != nil {
+		err = fmt.Errorf("failed to execute SQL -> %v", err)
+	}
+
 	return
 }
 
 func (p *Pool) Query(sql string, args ...interface{}) (rows pgx.Rows, err error) {
 	rows, err = p.p.Query(context.Background(), sql, args)
+	if err != nil {
+		err = fmt.Errorf("failed to query rows from database -> %v", err)
+	}
+
 	return
 }
 
@@ -38,5 +46,9 @@ func NewPool(
 			username, password, addr, port, name,
 		),
 	)
+	if err != nil {
+		err = fmt.Errorf("failed to establish connection with database -> %v", err)
+	}
+
 	return
 }

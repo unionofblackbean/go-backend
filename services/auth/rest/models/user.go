@@ -1,6 +1,8 @@
 package models
 
 import (
+	"fmt"
+
 	"github.com/google/uuid"
 	"github.com/unionofblackbean/backend/pkg/encoding"
 	"github.com/unionofblackbean/backend/pkg/security"
@@ -15,12 +17,12 @@ type User struct {
 func NewUser(uuid uuid.UUID, password string) (*User, error) {
 	passwordSalt, err := security.GeneratePasswordSalt()
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to generate password salt -> %v", err)
 	}
 
 	passwordHash, err := security.HashPassword(password, passwordSalt)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to hash password -> %v", err)
 	}
 
 	return &User{
