@@ -154,3 +154,20 @@ func DeleteUser(uuid uuid.UUID) (err error) {
 	)
 	return
 }
+
+func IsExistsUser(uuid uuid.UUID) (exists bool, err error) {
+	err = checkPool()
+	if err != nil {
+		return
+	}
+
+	err = pool.QueryRow(
+		"SELECT EXISTS(SELECT 1 FROM users WHERE uuid=$1);",
+		pgtype.UUID{
+			Bytes:  uuid,
+			Status: pgtype.Present,
+		},
+	).Scan(&exists)
+
+	return
+}

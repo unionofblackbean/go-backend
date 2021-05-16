@@ -37,6 +37,15 @@ func Users(ctx *fiber.Ctx) error {
 			return fmt.Errorf("failed to parse UUID -> %v", err)
 		}
 
+		exists, err := dao.IsExistsUser(uuid)
+		if err != nil {
+			return fmt.Errorf("failed to check if user exists -> %v", err)
+		}
+		if exists {
+			responses.SendResourceAlreadyExistsResponse(ctx)
+			return nil
+		}
+
 		user, err := models.NewUser(uuid, rawPassword)
 		if err != nil {
 			return fmt.Errorf("failed to create new user object -> %v", err)
