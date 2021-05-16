@@ -18,28 +18,12 @@ import (
 func Users(ctx *fiber.Ctx) error {
 	switch ctx.Method() {
 	case http.MethodGet:
-		rawUUID := ctx.Params("uuid")
-
-		if rawUUID == "" {
-			users, err := dao.GetAllUsersUUID()
-			if err != nil {
-				return fmt.Errorf("failed to get all users' UUID -> %v", err)
-			}
-
-			responses.SendDataResponse(ctx, &users)
-		} else {
-			uuid, err := uuid.Parse(rawUUID)
-			if err != nil {
-				return fmt.Errorf("failed to parse UUID -> %v", err)
-			}
-
-			user, err := dao.GetUser(uuid)
-			if err != nil {
-				return fmt.Errorf("failed to get user -> %v", err)
-			}
-
-			responses.SendDataResponse(ctx, user)
+		users, err := dao.GetAllUsersUUID()
+		if err != nil {
+			return fmt.Errorf("failed to get all users' UUID -> %v", err)
 		}
+
+		responses.SendDataResponse(ctx, &users)
 	case http.MethodPost:
 		rawUUID := ctx.FormValue("uuid")
 		rawPassword := ctx.FormValue("password")
