@@ -49,7 +49,10 @@ func main() {
 		Action: func(ctx *cli.Context) error {
 			configPath := ctx.String("config")
 			if configPath != "" {
-				config.Load(configPath, &conf)
+				err := config.Load(configPath, &conf)
+				if err != nil {
+					return fmt.Errorf("failed to load config file -> %v", err)
+				}
 			}
 
 			pool, err := database.NewPool(
