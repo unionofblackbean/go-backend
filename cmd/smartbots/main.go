@@ -5,6 +5,8 @@ import (
 	"log"
 	"os"
 
+	_ "embed"
+
 	"github.com/unionofblackbean/backend/pkg/config"
 	"github.com/unionofblackbean/backend/pkg/database"
 	"github.com/unionofblackbean/backend/services/smartbots"
