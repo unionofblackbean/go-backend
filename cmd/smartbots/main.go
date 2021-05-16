@@ -9,6 +9,7 @@ import (
 
 	"github.com/unionofblackbean/backend/pkg/config"
 	"github.com/unionofblackbean/backend/pkg/database"
+	"github.com/unionofblackbean/backend/pkg/rest"
 	"github.com/unionofblackbean/backend/services/smartbots"
 	"github.com/unionofblackbean/backend/services/smartbots/api"
 	"github.com/urfave/cli/v2"
@@ -18,7 +19,7 @@ import (
 var databaseSchema string
 
 var conf = smartbots.Config{
-	Rest: smartbots.RestConfig{
+	Rest: rest.Config{
 		BindAddress: "127.0.0.1",
 		BindPort:    8001,
 	},

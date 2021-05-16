@@ -1,13 +1,11 @@
 package smartbots
 
-import "github.com/unionofblackbean/backend/pkg/database"
-
-type RestConfig struct {
-	BindAddress string `json:"bind_addr"`
-	BindPort    uint16 `json:"bind_port"`
-}
+import (
+	"github.com/unionofblackbean/backend/pkg/database"
+	"github.com/unionofblackbean/backend/pkg/rest"
+)
 
 type Config struct {
-	Rest     RestConfig      `json:"rest"`
+	Rest     rest.Config     `json:"rest"`
 	Database database.Config `json:"db"`
 }

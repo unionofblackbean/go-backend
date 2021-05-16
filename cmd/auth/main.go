@@ -9,6 +9,7 @@ import (
 
 	"github.com/unionofblackbean/backend/pkg/config"
 	"github.com/unionofblackbean/backend/pkg/database"
+	"github.com/unionofblackbean/backend/pkg/rest"
 	"github.com/unionofblackbean/backend/services/auth"
 	"github.com/unionofblackbean/backend/services/auth/api"
 	"github.com/urfave/cli/v2"
@@ -18,7 +19,7 @@ import (
 var databaseSchema string
 
 var conf = auth.Config{
-	Rest: auth.RestConfig{
+	Rest: rest.Config{
 		BindAddress: "127.0.0.1",
 		BindPort:    8000,
 	},
