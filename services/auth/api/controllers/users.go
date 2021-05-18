@@ -9,7 +9,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
 	"github.com/unionofblackbean/backend/pkg/encoding"
-	"github.com/unionofblackbean/backend/pkg/responses"
+	"github.com/unionofblackbean/backend/pkg/rest"
 	"github.com/unionofblackbean/backend/pkg/security"
 	"github.com/unionofblackbean/backend/services/auth/api/dao"
 	"github.com/unionofblackbean/backend/services/auth/api/models"
@@ -23,7 +23,7 @@ func Users(ctx *fiber.Ctx) error {
 			return fmt.Errorf("failed to get all users' UUID -> %v", err)
 		}
 
-		responses.SendDataResponse(ctx, &users)
+		rest.SendDataResponse(ctx, &users)
 	case http.MethodPost:
 		rawUUID := ctx.FormValue("uuid")
 		rawPassword := ctx.FormValue("password")
@@ -42,7 +42,7 @@ func Users(ctx *fiber.Ctx) error {
 			return fmt.Errorf("failed to check user's existence -> %v", err)
 		}
 		if exists {
-			responses.SendResourceAlreadyExistsResponse(ctx)
+			rest.SendResourceAlreadyExistsResponse(ctx)
 			return nil
 		}
 
@@ -74,7 +74,7 @@ func Users(ctx *fiber.Ctx) error {
 			return fmt.Errorf("failed to check user's existence -> %v", err)
 		}
 		if !exists {
-			responses.SendResourceNotFoundResponse(ctx)
+			rest.SendResourceNotFoundResponse(ctx)
 			return nil
 		}
 
@@ -134,7 +134,7 @@ func Users(ctx *fiber.Ctx) error {
 			return fmt.Errorf("failed to check user's existence -> %v", err)
 		}
 		if !exists {
-			responses.SendResourceNotFoundResponse(ctx)
+			rest.SendResourceNotFoundResponse(ctx)
 			return nil
 		}
 
@@ -170,7 +170,7 @@ func Users(ctx *fiber.Ctx) error {
 			return errors.New("incorrect password")
 		}
 	default:
-		responses.SendUnsupportedMethodResponse(ctx)
+		rest.SendUnsupportedMethodResponse(ctx)
 	}
 
 	return nil

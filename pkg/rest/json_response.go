@@ -1,4 +1,4 @@
-package responses
+package rest
 
 type JsonResponse struct {
 	Code    int         `json:"code"`
