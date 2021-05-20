@@ -5,10 +5,10 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/jackc/pgtype"
-	"github.com/unionofblackbean/backend/services/auth/api/models"
+	"github.com/unionofblackbean/backend/services/auth/api/entities"
 )
 
-func CreateUser(user *models.User) (err error) {
+func CreateUser(user *entities.User) (err error) {
 	err = checkPool()
 	if err != nil {
 		return
@@ -26,7 +26,7 @@ func CreateUser(user *models.User) (err error) {
 	return
 }
 
-func GetUser(uuid uuid.UUID) (user *models.User, err error) {
+func GetUser(uuid uuid.UUID) (user *entities.User, err error) {
 	err = checkPool()
 	if err != nil {
 		return
@@ -46,7 +46,7 @@ func GetUser(uuid uuid.UUID) (user *models.User, err error) {
 		return
 	}
 
-	user = &models.User{
+	user = &entities.User{
 		UUID:         rawUUID.Bytes,
 		PasswordHash: rawPasswordHash,
 		PasswordSalt: rawPasswordSalt,
@@ -54,7 +54,7 @@ func GetUser(uuid uuid.UUID) (user *models.User, err error) {
 	return
 }
 
-func GetAllUsers() (users []models.User, err error) {
+func GetAllUsers() (users []entities.User, err error) {
 	err = checkPool()
 	if err != nil {
 		return
@@ -80,7 +80,7 @@ func GetAllUsers() (users []models.User, err error) {
 			return
 		}
 
-		users = append(users, models.User{
+		users = append(users, entities.User{
 			UUID:         uuid.Bytes,
 			PasswordHash: passwordHash,
 			PasswordSalt: passwordSalt,
@@ -121,7 +121,7 @@ func GetAllUsersUUID() (uuids []string, err error) {
 	return
 }
 
-func UpdateUser(user *models.User) (err error) {
+func UpdateUser(user *entities.User) (err error) {
 	err = checkPool()
 	if err != nil {
 		return

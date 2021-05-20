@@ -12,7 +12,7 @@ import (
 	"github.com/unionofblackbean/backend/pkg/rest"
 	"github.com/unionofblackbean/backend/pkg/security"
 	"github.com/unionofblackbean/backend/services/auth/api/dao"
-	"github.com/unionofblackbean/backend/services/auth/api/models"
+	"github.com/unionofblackbean/backend/services/auth/api/entities"
 )
 
 func Users(ctx *fiber.Ctx) error {
@@ -46,7 +46,7 @@ func Users(ctx *fiber.Ctx) error {
 			return nil
 		}
 
-		user, err := models.NewUser(uuid, rawPassword)
+		user, err := entities.NewUser(uuid, rawPassword)
 		if err != nil {
 			return fmt.Errorf("failed to create new user object -> %v", err)
 		}
@@ -106,7 +106,7 @@ func Users(ctx *fiber.Ctx) error {
 
 		// compare produced password hash and real password hash
 		if bytes.Equal(passwordHash, dbPasswordHash) {
-			newUser, err := models.NewUser(dbUser.UUID, newPassword)
+			newUser, err := entities.NewUser(dbUser.UUID, newPassword)
 			if err != nil {
 				return fmt.Errorf("failed to create new user object -> %v", err)
 			}
