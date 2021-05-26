@@ -2,6 +2,7 @@ package database
 
 import (
 	"context"
+	"errors"
 	"fmt"
 
 	"github.com/jackc/pgx/v4"
@@ -26,6 +27,14 @@ func NewPool(
 	)
 	if err != nil {
 		err = fmt.Errorf("failed to establish connection with database -> %v", err)
+	}
+
+	return
+}
+
+func (p *Pool) Validate() (err error) {
+	if p == nil {
+		err = errors.New("database connection pool not initialized")
 	}
 
 	return

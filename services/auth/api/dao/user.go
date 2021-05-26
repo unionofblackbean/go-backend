@@ -9,7 +9,7 @@ import (
 )
 
 func CreateUser(user *entities.User) (err error) {
-	err = checkPool()
+	err = pool.Validate()
 	if err != nil {
 		return
 	}
@@ -27,7 +27,7 @@ func CreateUser(user *entities.User) (err error) {
 }
 
 func GetUser(uuid uuid.UUID) (user *entities.User, err error) {
-	err = checkPool()
+	err = pool.Validate()
 	if err != nil {
 		return
 	}
@@ -55,7 +55,7 @@ func GetUser(uuid uuid.UUID) (user *entities.User, err error) {
 }
 
 func GetAllUsers() (users []entities.User, err error) {
-	err = checkPool()
+	err = pool.Validate()
 	if err != nil {
 		return
 	}
@@ -91,7 +91,7 @@ func GetAllUsers() (users []entities.User, err error) {
 }
 
 func GetAllUsersUUID() (uuids []string, err error) {
-	err = checkPool()
+	err = pool.Validate()
 	if err != nil {
 		return
 	}
@@ -122,7 +122,7 @@ func GetAllUsersUUID() (uuids []string, err error) {
 }
 
 func UpdateUser(user *entities.User) (err error) {
-	err = checkPool()
+	err = pool.Validate()
 	if err != nil {
 		return
 	}
@@ -140,7 +140,7 @@ func UpdateUser(user *entities.User) (err error) {
 }
 
 func DeleteUser(uuid uuid.UUID) (err error) {
-	err = checkPool()
+	err = pool.Validate()
 	if err != nil {
 		return
 	}
@@ -156,7 +156,7 @@ func DeleteUser(uuid uuid.UUID) (err error) {
 }
 
 func IsExistsUser(uuid uuid.UUID) (exists bool, err error) {
-	err = checkPool()
+	err = pool.Validate()
 	if err != nil {
 		return
 	}
