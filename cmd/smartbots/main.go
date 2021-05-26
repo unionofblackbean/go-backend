@@ -73,14 +73,9 @@ func main() {
 			}
 
 			api.Init(pool)
-			api.Run(conf.Rest.BindAddress, conf.Rest.BindPort)
-
-			return nil
+			return api.Run(conf.Rest.BindAddress, conf.Rest.BindPort)
 		},
 	}
 
-	err := app.Run(os.Args)
-	if err != nil {
-		log.Fatal(err)
-	}
+	log.Fatal(app.Run(os.Args))
 }
