@@ -15,7 +15,7 @@ func CreateUser(user *entities.User) (err error) {
 	}
 
 	err = pool.Exec(
-		"INSERT INTO users VALUES ($1, $2, $3);",
+		"INSERT INTO users (uuid, password_hash, password_salt) VALUES ($1, $2, $3);",
 		pgtype.UUID{
 			Bytes:  user.UUID,
 			Status: pgtype.Present,
@@ -36,7 +36,7 @@ func GetUser(uuid uuid.UUID) (*entities.User, error) {
 	var rawPasswordHash string
 	var rawPasswordSalt string
 	err = pool.QueryRow(
-		"SELECT * FROM users WHERE uuid=$1;",
+		"SELECT uuid, password_hash, password_salt FROM users WHERE uuid=$1;",
 		pgtype.UUID{
 			Bytes:  uuid,
 			Status: pgtype.Present,
@@ -52,43 +52,6 @@ func GetUser(uuid uuid.UUID) (*entities.User, error) {
 		PasswordSalt: rawPasswordSalt,
 	}
 	return &user, nil
-}
-
-func GetAllUsers() ([]entities.User, error) {
-	err := pool.Validate()
-	if err != nil {
-		return nil, err
-	}
-
-	rows, err := pool.Query(
-		"SELECT * FROM users;",
-	)
-	if err != nil {
-		return nil, err
-	}
-
-	var users []entities.User
-	for rows.Next() {
-		var userUUID pgtype.UUID
-		var passwordHash string
-		var passwordSalt string
-		err = rows.Scan(
-			&userUUID,
-			&passwordHash,
-			&passwordSalt,
-		)
-		if err != nil {
-			return nil, err
-		}
-
-		users = append(users, entities.User{
-			UUID:         userUUID.Bytes,
-			PasswordHash: passwordHash,
-			PasswordSalt: passwordSalt,
-		})
-	}
-
-	return users, nil
 }
 
 func GetAllUsersUUID() ([]string, error) {
