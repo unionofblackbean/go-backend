@@ -17,8 +17,9 @@ func NewPool(
 	username string, password string,
 	addr string, port uint16,
 	name string,
-) (pool *Pool, err error) {
-	pool = new(Pool)
+) (*Pool, error) {
+	var err error
+	pool := new(Pool)
 	pool.p, err = pgxpool.Connect(context.Background(),
 		fmt.Sprintf(
 			"postgresql://%s:%s@%s:%d/%s",
@@ -26,10 +27,10 @@ func NewPool(
 		),
 	)
 	if err != nil {
-		err = fmt.Errorf("failed to establish connection with database -> %v", err)
+		return nil, fmt.Errorf("failed to establish connection with database -> %v", err)
 	}
 
-	return
+	return pool, nil
 }
 
 func (p *Pool) Validate() (err error) {
@@ -49,13 +50,13 @@ func (p *Pool) Exec(sql string, args ...interface{}) (err error) {
 	return
 }
 
-func (p *Pool) Query(sql string, args ...interface{}) (rows pgx.Rows, err error) {
-	rows, err = p.p.Query(context.Background(), sql, args)
+func (p *Pool) Query(sql string, args ...interface{}) (pgx.Rows, error) {
+	rows, err := p.p.Query(context.Background(), sql, args)
 	if err != nil {
-		err = fmt.Errorf("failed to query rows from database -> %v", err)
+		return nil, fmt.Errorf("failed to query rows from database -> %v", err)
 	}
 
-	return
+	return rows, nil
 }
 
 func (p *Pool) QueryRow(sql string, args ...interface{}) pgx.Row {

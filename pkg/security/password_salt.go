@@ -5,13 +5,13 @@ import (
 	"fmt"
 )
 
-func GeneratePasswordSalt() (salt []byte, err error) {
+func GeneratePasswordSalt() ([]byte, error) {
 	// generate salt
-	salt = make([]byte, 64)
-	_, err = rand.Read(salt)
+	salt := make([]byte, 64)
+	_, err := rand.Read(salt)
 	if err != nil {
-		err = fmt.Errorf("failed to read random bytes from random number generator -> %v", err)
+		return nil, fmt.Errorf("failed to read random bytes from random number generator -> %v", err)
 	}
 
-	return
+	return salt, nil
 }

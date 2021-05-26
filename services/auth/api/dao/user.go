@@ -26,10 +26,10 @@ func CreateUser(user *entities.User) (err error) {
 	return
 }
 
-func GetUser(uuid uuid.UUID) (user *entities.User, err error) {
-	err = pool.Validate()
+func GetUser(uuid uuid.UUID) (*entities.User, error) {
+	err := pool.Validate()
 	if err != nil {
-		return
+		return nil, err
 	}
 
 	var rawUUID pgtype.UUID
@@ -43,71 +43,73 @@ func GetUser(uuid uuid.UUID) (user *entities.User, err error) {
 		},
 	).Scan(&rawUUID, &rawPasswordHash, &rawPasswordSalt)
 	if err != nil {
-		return
+		return nil, err
 	}
 
-	user = &entities.User{
+	user := entities.User{
 		UUID:         rawUUID.Bytes,
 		PasswordHash: rawPasswordHash,
 		PasswordSalt: rawPasswordSalt,
 	}
-	return
+	return &user, nil
 }
 
-func GetAllUsers() (users []entities.User, err error) {
-	err = pool.Validate()
+func GetAllUsers() ([]entities.User, error) {
+	err := pool.Validate()
 	if err != nil {
-		return
+		return nil, err
 	}
 
 	rows, err := pool.Query(
 		"SELECT * FROM users;",
 	)
 	if err != nil {
-		return
+		return nil, err
 	}
 
+	var users []entities.User
 	for rows.Next() {
-		var uuid pgtype.UUID
+		var userUUID pgtype.UUID
 		var passwordHash string
 		var passwordSalt string
 		err = rows.Scan(
-			&uuid,
+			&userUUID,
 			&passwordHash,
 			&passwordSalt,
 		)
 		if err != nil {
-			return
+			return nil, err
 		}
 
 		users = append(users, entities.User{
-			UUID:         uuid.Bytes,
+			UUID:         userUUID.Bytes,
 			PasswordHash: passwordHash,
 			PasswordSalt: passwordSalt,
 		})
 	}
 
-	return
+	return users, nil
 }
 
-func GetAllUsersUUID() (uuids []string, err error) {
-	err = pool.Validate()
+func GetAllUsersUUID() ([]string, error) {
+	err := pool.Validate()
 	if err != nil {
-		return
+		return nil, err
 	}
 
 	rows, err := pool.Query(
 		"SELECT uuid FROM users;",
 	)
 	if err != nil {
-		return
+		return nil, err
 	}
 
+	var uuids []string
 	for rows.Next() {
 		var rawUserUUID pgtype.UUID
 		err = rows.Scan(&rawUserUUID)
 		if err != nil {
-			return
+			return nil, err
 		}
 
 		userUUID, err := uuid.FromBytes(rawUserUUID.Bytes[:])
@@ -118,7 +120,7 @@ func GetAllUsersUUID() (uuids []string, err error) {
 		uuids = append(uuids, userUUID.String())
 	}
 
-	return
+	return uuids, nil
 }
 
 func UpdateUser(user *entities.User) (err error) {
