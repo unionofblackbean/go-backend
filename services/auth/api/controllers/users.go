@@ -32,12 +32,12 @@ func Users(ctx *fiber.Ctx) error {
 			return errors.New("missing form value uuid or password")
 		}
 
-		uuid, err := uuid.Parse(rawUUID)
+		userUUID, err := uuid.Parse(rawUUID)
 		if err != nil {
 			return fmt.Errorf("failed to parse UUID -> %v", err)
 		}
 
-		exists, err := dao.IsExistsUser(uuid)
+		exists, err := dao.IsExistsUser(userUUID)
 		if err != nil {
 			return fmt.Errorf("failed to check user's existence -> %v", err)
 		}
@@ -46,7 +46,7 @@ func Users(ctx *fiber.Ctx) error {
 			return nil
 		}
 
-		user, err := entities.NewUser(uuid, rawPassword)
+		user, err := entities.NewUser(userUUID, rawPassword)
 		if err != nil {
 			return fmt.Errorf("failed to create new user object -> %v", err)
 		}
@@ -64,12 +64,12 @@ func Users(ctx *fiber.Ctx) error {
 			return errors.New("missing form value uuid, old_password or new_password")
 		}
 
-		uuid, err := uuid.Parse(rawUUID)
+		userUUID, err := uuid.Parse(rawUUID)
 		if err != nil {
 			return fmt.Errorf("failed to parse UUID -> %v", err)
 		}
 
-		exists, err := dao.IsExistsUser(uuid)
+		exists, err := dao.IsExistsUser(userUUID)
 		if err != nil {
 			return fmt.Errorf("failed to check user's existence -> %v", err)
 		}
@@ -78,7 +78,7 @@ func Users(ctx *fiber.Ctx) error {
 			return nil
 		}
 
-		dbUser, err := dao.GetUser(uuid)
+		dbUser, err := dao.GetUser(userUUID)
 		if err != nil {
 			return fmt.Errorf("failed to get user -> %v", err)
 		}
@@ -124,12 +124,12 @@ func Users(ctx *fiber.Ctx) error {
 			return errors.New("missing form value uuid or password")
 		}
 
-		uuid, err := uuid.Parse(rawUUID)
+		userUUID, err := uuid.Parse(rawUUID)
 		if err != nil {
 			return fmt.Errorf("failed to parse UUID -> %v", err)
 		}
 
-		exists, err := dao.IsExistsUser(uuid)
+		exists, err := dao.IsExistsUser(userUUID)
 		if err != nil {
 			return fmt.Errorf("failed to check user's existence -> %v", err)
 		}
@@ -138,7 +138,7 @@ func Users(ctx *fiber.Ctx) error {
 			return nil
 		}
 
-		dbUser, err := dao.GetUser(uuid)
+		dbUser, err := dao.GetUser(userUUID)
 		if err != nil {
 			return fmt.Errorf("failed to get user from database -> %v", err)
 		}
@@ -162,7 +162,7 @@ func Users(ctx *fiber.Ctx) error {
 
 		// compare produced password hash and real password hash
 		if bytes.Equal(passwordHash, dbPasswordHash) {
-			err := dao.DeleteUser(uuid)
+			err := dao.DeleteUser(userUUID)
 			if err != nil {
 				return fmt.Errorf("failed to delete user -> %v", err)
 			}
