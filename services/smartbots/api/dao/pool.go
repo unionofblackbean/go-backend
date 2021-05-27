@@ -1,7 +1,7 @@
 package dao
 
 import (
-	"github.com/unionofblackbean/backend/pkg/database"
+	"github.com/unionofblackbean/go-backend/pkg/database"
 )
 
 var pool *database.Pool

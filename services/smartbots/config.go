@@ -1,8 +1,8 @@
 package smartbots
 
 import (
-	"github.com/unionofblackbean/backend/pkg/database"
-	"github.com/unionofblackbean/backend/pkg/rest"
+	"github.com/unionofblackbean/go-backend/pkg/database"
+	"github.com/unionofblackbean/go-backend/pkg/rest"
 )
 
 type Config struct {

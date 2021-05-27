@@ -4,10 +4,10 @@ import (
 	"fmt"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/unionofblackbean/backend/pkg/database"
-	"github.com/unionofblackbean/backend/pkg/rest"
-	"github.com/unionofblackbean/backend/services/auth/api/controllers"
-	"github.com/unionofblackbean/backend/services/auth/api/dao"
+	"github.com/unionofblackbean/go-backend/pkg/database"
+	"github.com/unionofblackbean/go-backend/pkg/rest"
+	"github.com/unionofblackbean/go-backend/services/auth/api/controllers"
+	"github.com/unionofblackbean/go-backend/services/auth/api/dao"
 )
 
 func Init(pool *database.Pool) {

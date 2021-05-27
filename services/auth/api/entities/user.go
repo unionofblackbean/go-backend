@@ -4,8 +4,8 @@ import (
 	"fmt"
 
 	"github.com/google/uuid"
-	"github.com/unionofblackbean/backend/pkg/encoding"
-	"github.com/unionofblackbean/backend/pkg/security"
+	"github.com/unionofblackbean/go-backend/pkg/encoding"
+	"github.com/unionofblackbean/go-backend/pkg/security"
 )
 
 type User struct {

@@ -7,11 +7,11 @@ import (
 
 	_ "embed"
 
-	"github.com/unionofblackbean/backend/pkg/config"
-	"github.com/unionofblackbean/backend/pkg/database"
-	"github.com/unionofblackbean/backend/pkg/rest"
-	"github.com/unionofblackbean/backend/services/auth"
-	"github.com/unionofblackbean/backend/services/auth/api"
+	"github.com/unionofblackbean/go-backend/pkg/config"
+	"github.com/unionofblackbean/go-backend/pkg/database"
+	"github.com/unionofblackbean/go-backend/pkg/rest"
+	"github.com/unionofblackbean/go-backend/services/auth"
+	"github.com/unionofblackbean/go-backend/services/auth/api"
 	"github.com/urfave/cli/v2"
 )
 

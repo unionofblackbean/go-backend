@@ -1,4 +1,4 @@
-module github.com/unionofblackbean/backend
+module github.com/unionofblackbean/go-backend
 
 go 1.16
 

@@ -8,11 +8,11 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
-	"github.com/unionofblackbean/backend/pkg/encoding"
-	"github.com/unionofblackbean/backend/pkg/rest"
-	"github.com/unionofblackbean/backend/pkg/security"
-	"github.com/unionofblackbean/backend/services/auth/api/dao"
-	"github.com/unionofblackbean/backend/services/auth/api/entities"
+	"github.com/unionofblackbean/go-backend/pkg/encoding"
+	"github.com/unionofblackbean/go-backend/pkg/rest"
+	"github.com/unionofblackbean/go-backend/pkg/security"
+	"github.com/unionofblackbean/go-backend/services/auth/api/dao"
+	"github.com/unionofblackbean/go-backend/services/auth/api/entities"
 )
 
 func Users(ctx *fiber.Ctx) error {

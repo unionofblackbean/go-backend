@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/google/uuid"
 	"github.com/jackc/pgtype"
-	"github.com/unionofblackbean/backend/services/smartbots/api/entities"
+	"github.com/unionofblackbean/go-backend/services/smartbots/api/entities"
 )
 
 func CreateBot(bot *entities.Bot) (err error) {

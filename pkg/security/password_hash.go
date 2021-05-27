@@ -3,7 +3,7 @@ package security
 import (
 	"fmt"
 
-	"github.com/unionofblackbean/backend/pkg/pool"
+	"github.com/unionofblackbean/go-backend/pkg/pool"
 )
 
 func HashPassword(password string, salt []byte) ([]byte, error) {

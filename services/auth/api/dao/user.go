@@ -5,7 +5,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/jackc/pgtype"
-	"github.com/unionofblackbean/backend/services/auth/api/entities"
+	"github.com/unionofblackbean/go-backend/services/auth/api/entities"
 )
 
 func CreateUser(user *entities.User) (err error) {
