@@ -10,10 +10,10 @@ import (
 var sha3512HashPool sync.Pool
 
 func GetSha3512Hash() hash.Hash {
-	if rawHash := sha3512HashPool.Get(); rawHash != nil {
-		hash, _ := rawHash.(hash.Hash)
-		hash.Reset()
-		return hash
+	if rawSha3512Hash := sha3512HashPool.Get(); rawSha3512Hash != nil {
+		sha3512Hash, _ := rawSha3512Hash.(hash.Hash)
+		sha3512Hash.Reset()
+		return sha3512Hash
 	}
 
 	return sha3.New512()
