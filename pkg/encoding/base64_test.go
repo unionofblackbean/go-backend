@@ -31,6 +31,6 @@ func BenchmarkBase64RawStdDecodeString(b *testing.B) {
 
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		Base64RawStdDecodeString(data)
+		_, _ = Base64RawStdDecodeString(data)
 	}
 }
