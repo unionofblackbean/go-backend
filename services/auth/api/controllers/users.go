@@ -23,7 +23,10 @@ func Users(ctx *fiber.Ctx) error {
 			return fmt.Errorf("failed to get all users' UUID -> %v", err)
 		}
 
-		rest.SendDataResponse(ctx, &users)
+		err = rest.SendDataResponse(ctx, &users)
+		if err != nil {
+			return fmt.Errorf("failed to send data response -> %v", err)
+		}
 	case http.MethodPost:
 		rawUUID := ctx.FormValue("uuid")
 		rawPassword := ctx.FormValue("password")
@@ -42,7 +45,11 @@ func Users(ctx *fiber.Ctx) error {
 			return fmt.Errorf("failed to check user's existence -> %v", err)
 		}
 		if exists {
-			rest.SendResourceAlreadyExistsResponse(ctx)
+			err := rest.SendResourceAlreadyExistsResponse(ctx)
+			if err != nil {
+				return fmt.Errorf("failed to send resource already exists response -> %v", err)
+			}
+
 			return nil
 		}
 
@@ -74,7 +81,11 @@ func Users(ctx *fiber.Ctx) error {
 			return fmt.Errorf("failed to check user's existence -> %v", err)
 		}
 		if !exists {
-			rest.SendResourceNotFoundResponse(ctx)
+			err := rest.SendResourceNotFoundResponse(ctx)
+			if err != nil {
+				return fmt.Errorf("failed to send resource not found response -> %v", err)
+			}
+
 			return nil
 		}
 
@@ -134,7 +145,10 @@ func Users(ctx *fiber.Ctx) error {
 			return fmt.Errorf("failed to check user's existence -> %v", err)
 		}
 		if !exists {
-			rest.SendResourceNotFoundResponse(ctx)
+			err := rest.SendResourceNotFoundResponse(ctx)
+			if err != nil {
+				return fmt.Errorf("failed to send resource not found response -> %v", err)
+			}
 			return nil
 		}
 
@@ -170,7 +184,10 @@ func Users(ctx *fiber.Ctx) error {
 			return errors.New("incorrect password")
 		}
 	default:
-		rest.SendUnsupportedMethodResponse(ctx)
+		err := rest.SendUnsupportedMethodResponse(ctx)
+		if err != nil {
+			return fmt.Errorf("failed to send unsupported method response -> %v", err)
+		}
 	}
 
 	return nil

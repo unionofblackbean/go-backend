@@ -5,6 +5,5 @@ import (
 )
 
 func NotFoundMiddleWare(ctx *fiber.Ctx) error {
-	SendEndpointNotFoundResponse(ctx)
-	return nil
+	return SendEndpointNotFoundResponse(ctx)
 }
