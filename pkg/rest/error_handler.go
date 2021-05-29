@@ -5,6 +5,6 @@ import (
 )
 
 func ErrorHandler(ctx *fiber.Ctx, err error) error {
-	SendInternalServerErrorReponse(ctx, err)
+	SendInternalServerErrorResponse(ctx, err)
 	return nil
 }
